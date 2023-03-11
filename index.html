@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Snags</title>
+  <style>
+    #game-area {
+      width: 600px;
+      height: 400px;
+      border: 1px solid black;
+      position: relative;
+    }
+
+    #paddle {
+      width: 80px;
+      height: 10px;
+      background-color: black;
+      position: absolute;
+      bottom: 0;
+      left: 260px;
+    }
+
+    #ball {
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <div id="game-area">
+    <div id="paddle"></div>
+    <div id="ball"></div>
+  </div>
+  <script>
+    const paddle = document.getElementById('paddle');
+    const ball = document.getElementById('ball');
+    let ballX = 300;
+    let ballY = 200;
+    let ballSpeedX = 5;
+    let ballSpeedY = 5;
+    let paddleX = 260;
+    let paddleSpeed = 0;
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'ArrowLeft') {
+        paddleSpeed = -10;
+      } else if (event.key === 'ArrowRight') {
+        paddleSpeed = 10;
+      }
+    });
+
+    document.addEventListener('keyup', function(event) {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        paddleSpeed = 0;
+      }
+    });
+
+    function gameLoop() {
+      ballX += ballSpeedX;
+      ballY += ballSpeedY;
+
+      if (ballX < 0 || ballX > 580) {
+        ballSpeedX = -ballSpeedX;
+      }
+
+      if (ballY < 0) {
+        ballSpeedY = -ballSpeedY;
+      } else if (ballY > 380) {
+        if (ballX > paddleX && ballX < paddleX + 80) {
+          ballSpeedY = -ballSpeedY;
+        } else {
+          alert('Game over!');
+          document.location.reload();
+        }
+      }
+
+      paddleX += paddleSpeed;
+
+      if (paddleX < 0) {
+        paddleX = 0;
+      } else if (paddleX > 520) {
+        paddleX = 520;
+      }
+
+      paddle.style.left = paddleX + 'px';
+      ball.style.left = ballX + 'px';
+      ball.style.top = ballY + 'px';
+    }
+
+    setInterval(gameLoop, 16);
+  </script>
+</body>
+</html>
